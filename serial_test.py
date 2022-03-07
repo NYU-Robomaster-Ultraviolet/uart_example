@@ -1,32 +1,39 @@
 import serial
 
+
+PORT = "COM7"  # change to your port
+
 # configure the serial connections (the parameters differs on the device you are connecting to)
 ser = serial.Serial(
-    port='/dev/ttyUSB1',
-    baudrate=9600,
-    parity=serial.PARITY_ODD,
-    stopbits=serial.STOPBITS_TWO,
-    bytesize=serial.SEVENBITS
+    port=PORT,
+    baudrate=115200,
+    stopbits=1,
+    timeout=0.1
 )
 
-ser.isOpen()
+if not ser.isOpen():
+    print("Serial open failed, cannot open", PORT)
+    print("try to modify line 4 to corresponding port")
+    exit()
+else:
+    print('Enter your commands below. Insert "exit" to leave the application.')
 
-print('Enter your commands below.\r\nInsert "exit" to leave the application.')
-
-input=1
-while 1 :
+recv = 1
+send = ''
+while 1:
     # get keyboard input
-    input = input("OUT >> ")
+    recv = input("OUT >> ")
 
-    if input == 'exit':
+    if recv == 'exit':
         ser.close()
         exit()
     else:
         # send the character to the device
-        ser.write(input.encode('ascii'))
-        
-        while ser.inWaiting() > 0:
-            out = ser.read(1).decode('ascii')
-            
-        if out != '':
-            print("IN << " + out)
+        ser.write(recv.encode('ascii'))
+
+        # while ser.inWaiting() > 0:
+        #     print(True)
+        send = ser.readline().decode('ascii')
+
+        if send != '':
+            print("IN << " + send)
