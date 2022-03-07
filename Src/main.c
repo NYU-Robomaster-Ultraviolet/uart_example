@@ -72,7 +72,7 @@ void USART1_IRQHandler(void)
         receive = huart1.Instance->DR;
 //				HAL_UART_Receive_IT(&huart1, Rx_data, 4);
 //				HAL_UART_Transmit(&huart1, "Robomaster", sizeof("Robomaster")/sizeof("Robomaster"[0]), 100);
-				HAL_UART_Transmit(&huart1, &receive, 1, 100);
+				HAL_UART_Transmit(&huart1, (uint8_t *)&receive, 1, 100);
         HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);
 
     }
